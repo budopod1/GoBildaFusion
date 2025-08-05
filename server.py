@@ -21,6 +21,10 @@ def inject_js(txt):
 def serve_submitted():
     return SUBMITTED_HTML
 
+@app.route("/customer/<path:path>")
+def serve_customer(path):
+    return ""
+
 @app.route("/<path:path>")
 def serve_path(path):
     return proxy_request()

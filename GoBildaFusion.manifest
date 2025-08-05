@@ -1,11 +1,12 @@
 {
 	"autodeskProduct":	"Fusion",
-	"type":	"script",
+	"type":	"addin",
 	"author":	"Martin Staab",
 	"description":	{
 		"":	"Easily add GoBilda parts to your Fusion designs"
 	},
 	"version":	"",
+	"runOnStartup":	true,
 	"supportedOS":	"windows|mac",
 	"editEnabled":	true,
 	"iconFilename":	"32x32.png"
