@@ -12,7 +12,8 @@ target = "https://gobilda.com/"
 app = Flask(__name__)
 
 def proxy_request():
-    return requests.get(target+request.full_path).text
+    path = target + request.full_path.removeprefix("/")
+    return requests.get(path).text
 
 def inject_js(txt):
     return txt.replace("</head>", f"<script>{INJECT_JS}</script></head>")

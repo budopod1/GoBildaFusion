@@ -20,6 +20,8 @@ function navigateTo(url) {
 }
 
 function processTree(tree) {
+    document.documentElement.style.overflow = "auto";
+
     for (let a of tree.querySelectorAll("a")) {
         a.addEventListener("click", (e) => {
             e.preventDefault();

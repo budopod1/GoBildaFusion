@@ -140,11 +140,6 @@ def add_part_by_name(name, times):
         adsk.doEvents()
         root.occurrences.addByInsert(target_file, transform, True)
 
-def start_server():
-    os.chdir(os.path.dirname(__file__))
-    with open("file.txt", "w") as file:
-        file.write("HI!")
-
 def get_python_cmd():
     fusion_dir = Path(sys.executable).parent
     fusion_py = fusion_dir / "Python" / "python.exe"
@@ -153,9 +148,21 @@ def get_python_cmd():
     else:
         return "python3"
 
+def run_command(parts):
+    result = subprocess.run(parts, capture_output=True, text=True)
+    if result.returncode == 0:
+        return True
+    print(result.stderr)
+    return False
+
 def run(_context: str):
     global app, ui, project, folder
     try:
+        app = adsk.core.Application.get()
+        ui = app.userInterface
+        project = app.data.activeProject
+        folder = project.rootFolder
+
         os.chdir(os.path.dirname(__file__))
 
         python = get_python_cmd()
@@ -163,13 +170,11 @@ def run(_context: str):
             import flask
             import requests
         except ImportError:
-            subprocess.check_call([python, "-m", "pip", "install", "flask", "requests"])
+            if not run_command([python, "-m", "ensurepip"]):
+                return
+            if not run_command([python, "-m", "pip", "install", "flask", "requests"]):
+                return
         subprocess.Popen([python, "server.py"], creationflags=subprocess.CREATE_NO_WINDOW)
-
-        app = adsk.core.Application.get()
-        ui = app.userInterface
-        project = app.data.activeProject
-        folder = project.rootFolder
 
         queue_setup()
         adsk.autoTerminate(False)
